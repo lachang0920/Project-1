@@ -1,0 +1,119 @@
+/* 
+ * File:   main.cpp
+ * Author: Lancelote Chang
+ * Created on July 20, 2024, 06:24 PM
+ * Purpose:  Project 1: The War card game version 1
+ */
+
+// System libraries
+#include <iostream>
+#include <fstream> // File
+#include <ctime> // For seeding the random number generator 
+#include <cstdlib> // Provide "rand()" function to generate random card numbers
+#include <cmath> // Math library 
+#include <iomanip> // For formatting output
+
+using namespace std;
+
+// Constants for card values
+const int MIN_CARD_VALUE = 2; //smallest number is 2
+const int MAX_CARD_VALUE = 14; // 11=Jack, 12=Queen, 13=King, 14=Ace
+
+// Function to get card name from value
+string getCardName(int cardValue) {
+    switch (cardValue) {
+        case 11: return "Jack"; // 11=Jack
+        case 12: return "Queen"; // 12=Queen
+        case 13: return "King"; // 13=King
+        case 14: return "Ace"; // 14=Ace
+        default: return to_string(cardValue);
+    }
+}
+
+// Function to validate integer input
+
+
+//Execution begins here
+int main(int argc, char** argv) {
+    ofstream outFile("game_results.txt"); //  writing game results to a file
+
+    // Seed the random number generator
+    srand(static_cast<unsigned int>(time(0)));
+
+    // Welcome message
+    cout << "Welcome to the War card game!\n" << endl;
+    outFile << "Welcome to the War card game!" << endl;
+
+    // Get player names
+    string player1Name, player2Name;
+    cout << "Please enter name for Player 1 \n" << endl;
+    cin >> player1Name;
+    cout << "Please enter name for Player 2 \n " << endl;
+    cin >> player2Name;
+    cout << "Player 1: Andy" <<endl;
+    cout << "Player 2: Jason" <<endl;
+
+    // Get number of rounds
+    int rounds = 10;
+    
+    //Game start message
+    cout << "\nStart!" << endl;
+    
+    // Variables to hold the card values and scores for each player
+    int player1Card, player2Card;
+    int player1Score = 0, player2Score = 0;
+    
+    // Main game loop
+    for (int round = 1; round <= rounds; ++round) {
+        cout << "\nRound " << round << endl;
+        outFile << "\nRound " << round << endl;
+
+        // Draw random cards for each player
+        player1Card = rand() % (MAX_CARD_VALUE - MIN_CARD_VALUE + 1) + MIN_CARD_VALUE;
+        player2Card = rand() % (MAX_CARD_VALUE - MIN_CARD_VALUE + 1) + MIN_CARD_VALUE;
+
+        // Display the drawn cards
+        cout << player1Name << " draws: " << getCardName(player1Card) << endl;
+        outFile << player1Name << " draws: " << getCardName(player1Card) << endl;
+        cout << player2Name << " draws: " << getCardName(player2Card) << endl;
+        outFile << player2Name << " draws: " << getCardName(player2Card) << endl;
+
+        // Determine the winner of the round
+        if (player1Card > player2Card) {
+            cout << player1Name << " wins the round!" << endl;
+            outFile << player1Name << " wins the round!" << endl;
+            ++player1Score;
+        } else if (player2Card > player1Card) {
+            cout << player2Name << " wins the round!" << endl;
+            outFile << player2Name << " wins the round!" << endl;
+            ++player2Score;
+        } else {
+            cout << "It's a tie!" << endl;
+            outFile << "It's a tie!" << endl;
+        }
+    }
+
+    //Game over message
+    cout << "\nGame over !" << endl;
+    
+    // Determine the overall winner
+    cout << "\nFinal Scores:\n" << player1Name << ": " << player1Score << "\n" << player2Name << ": " << player2Score << endl;
+    outFile << "\nFinal Scores:\n" << player1Name << ": " << player1Score << "\n" << player2Name << ": " << player2Score << endl;
+
+    if (player1Score > player2Score) {
+        cout << player1Name << " wins the game!" << endl;
+        outFile << player1Name << " wins the game!" << endl;
+    } else if (player2Score > player1Score) {
+        cout << player2Name << " wins the game!" << endl;
+        outFile << player2Name << " wins the game!" << endl;
+    } else {
+        cout << "The game is a draw!" << endl;
+        outFile << "The game is a draw!" << endl;
+    }
+
+    // Close the file
+    outFile.close();
+    
+    // Exit the program
+    return 0;
+}
